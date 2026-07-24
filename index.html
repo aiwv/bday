@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Лунка 3</title>
+<title>Treasure Quest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -122,8 +122,8 @@
       <div class="hole"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">04</span></div>
     </div>
 
-    <h1>Лунка<br>ещё закрыта</h1>
-    <p class="sub">Третья часть подсказки появится здесь.</p>
+    <h1>Число<br>ещё спрятано</h1>
+    <p class="sub">Число третьего этапа появится здесь.</p>
 
     <div class="clock" id="clock">--:--:--</div>
     <div class="clock-label" id="clockLabel">до открытия</div>
@@ -141,11 +141,11 @@
       <div class="hole"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">04</span></div>
     </div>
 
-    <div class="prize-label">третья часть подсказки</div>
+    <div class="prize-label">Число этапа №3</div>
     <div class="prize" id="payload">--</div>
 
     <p class="note">
-      P.s. Последняя часть была весь день с тобой.<br>
+      P.s. Число последнего этапа было весь день с тобой.<br>
       Проверь свой рюкзак.
     </p>
   </div>
@@ -204,7 +204,7 @@ async function poll(){
 function unlock(){
   $btn.disabled = false;
   $btn.classList.add("ready");
-  $btn.textContent = "Открыть лунку 3";
+  $btn.textContent = "Показать число";
   $hole3.classList.add("done");
   $clockLabel.textContent = "открыто";
 }
