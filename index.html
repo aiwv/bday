@@ -185,7 +185,7 @@ function tick(){
 async function poll(){
   if (!polling) return;
   try {
-    const res = await fetch(`clue.json?t=${Date.now()}`, { cache: "no-store" });
+    const res = await fetch(`clue1.json?t=${Date.now()}`, { cache: "no-store" });
     if (res.ok){
       const data = await res.json();
       if (data && data.value){
