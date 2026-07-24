@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лунка 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0F2E24;
+    --chalk:#EDE8DC;
+    --flag:#D2452F;
+    --dim:#7E9A8C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--green);
+    color:var(--chalk);
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+    background-image:
+      repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 2px,transparent 2px 26px);
+  }
+  .card{width:100%;max-width:460px;text-align:center}
+
+  .eyebrow{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--dim);margin-bottom:28px;
+  }
+
+  .course{display:flex;justify-content:center;gap:14px;margin-bottom:34px}
+  .hole{
+    width:46px;height:56px;position:relative;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .hole .cup{
+    width:26px;height:9px;border-radius:50%;
+    background:rgba(0,0,0,.45);
+    box-shadow:inset 0 2px 0 rgba(0,0,0,.6);
+  }
+  .hole .pole{
+    position:absolute;bottom:6px;left:50%;width:2px;height:0;
+    background:var(--chalk);transform:translateX(-50%);
+    transition:height .5s ease;
+  }
+  .hole .flag{
+    position:absolute;left:50%;bottom:44px;
+    width:0;height:0;overflow:hidden;
+    border-top:7px solid transparent;border-bottom:7px solid transparent;
+    border-left:0 solid var(--flag);
+    transition:border-left-width .35s ease .35s;
+  }
+  .hole.done .pole{height:44px}
+  .hole.done .flag{border-left-width:18px}
+  .hole .num{
+    position:absolute;bottom:-20px;left:0;right:0;
+    font-size:10px;color:var(--dim);letter-spacing:.1em;
+  }
+
+  h1{
+    font-family:"Anton",Impact,sans-serif;
+    font-size:clamp(30px,9vw,44px);
+    line-height:1.05;letter-spacing:.01em;
+    text-transform:uppercase;margin-bottom:14px;
+  }
+  .sub{color:var(--dim);font-size:14px;line-height:1.6;margin-bottom:34px}
+
+  .clock{
+    font-size:clamp(38px,13vw,60px);font-weight:600;
+    letter-spacing:.04em;font-variant-numeric:tabular-nums;
+    margin-bottom:8px;
+  }
+  .clock-label{font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
+
+  button{
+    margin-top:34px;width:100%;
+    font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;
+    padding:17px 20px;border:1px solid var(--dim);border-radius:2px;
+    background:transparent;color:var(--dim);cursor:not-allowed;
+    transition:all .25s ease;
+  }
+  button.ready{
+    border-color:var(--flag);color:var(--chalk);
+    background:var(--flag);cursor:pointer;
+  }
+  button.ready:hover{filter:brightness(1.1)}
+  button:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+
+  .reveal{display:none}
+  .reveal.on{display:block;animation:rise .6s ease both}
+  .prize{
+    font-family:"Anton",Impact,sans-serif;
+    font-size:clamp(88px,32vw,150px);line-height:1;
+    color:var(--flag);letter-spacing:.02em;margin:10px 0 6px;
+  }
+  .prize-label{font-size:11px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+  .note{
+    margin-top:34px;padding-top:22px;border-top:1px solid rgba(237,232,220,.14);
+    font-size:13px;line-height:1.7;color:var(--dim);
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div id="locked">
+    <div class="eyebrow">Treasure quest · этап 3</div>
+
+    <div class="course">
+      <div class="hole done"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">01</span></div>
+      <div class="hole done"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">02</span></div>
+      <div class="hole" id="hole3"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">03</span></div>
+      <div class="hole"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">04</span></div>
+    </div>
+
+    <h1>Лунка<br>ещё закрыта</h1>
+    <p class="sub">Третья часть подсказки появится здесь.<br>Страница обновится сама — можно не перезагружать.</p>
+
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="clock-label" id="clockLabel">до открытия</div>
+
+    <button id="btn" disabled>Ещё рано</button>
+  </div>
+
+  <div class="reveal" id="revealed">
+    <div class="eyebrow">Treasure quest · этап 3 пройден</div>
+
+    <div class="course">
+      <div class="hole done"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">01</span></div>
+      <div class="hole done"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">02</span></div>
+      <div class="hole done"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">03</span></div>
+      <div class="hole"><span class="pole"></span><span class="flag"></span><span class="cup"></span><span class="num">04</span></div>
+    </div>
+
+    <div class="prize-label">третья часть подсказки</div>
+    <div class="prize" id="payload">--</div>
+
+    <p class="note">
+      Три из четырёх.<br><br>
+      Последняя часть найдёт тебя сама.
+    </p>
+  </div>
+
+</div>
+
+<script>
+const TARGET = new Date("2026-07-24T12:25:00+05:00");
+const $clock = document.getElementById("clock");
+const $clockLabel = document.getElementById("clockLabel");
+const $btn = document.getElementById("btn");
+const $locked = document.getElementById("locked");
+const $revealed = document.getElementById("revealed");
+const $payload = document.getElementById("payload");
+const $hole3 = document.getElementById("hole3");
+
+let clue = null;          
+let polling = true;
+
+const pad = n => String(n).padStart(2, "0");
+
+function tick(){
+  const diff = TARGET - new Date();
+
+  if (diff <= 0){
+    $clock.textContent = "00:00:00";
+    $clockLabel.textContent = clue ? "открыто" : "почти";
+  } else {
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor(diff % 3600000 / 60000);
+    const s = Math.floor(diff % 60000 / 1000);
+    $clock.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+  setTimeout(tick, 1000);
+}
+
+async function poll(){
+  if (!polling) return;
+  try {
+    const res = await fetch(`clue.json?t=${Date.now()}`, { cache: "no-store" });
+    if (res.ok){
+      const data = await res.json();
+      if (data && data.value){
+        clue = String(data.value);
+        polling = false;
+        unlock();
+        return;
+      }
+    }
+  } catch (e){
+    // файла ещё нет или сеть моргнула — просто пробуем снова
+  }
+  setTimeout(poll, 15000);
+}
+
+function unlock(){
+  $btn.disabled = false;
+  $btn.classList.add("ready");
+  $btn.textContent = "Открыть лунку 3";
+  $hole3.classList.add("done");
+  $clockLabel.textContent = "открыто";
+}
+
+$btn.addEventListener("click", () => {
+  if ($btn.disabled || !clue) return;
+  $payload.textContent = clue;
+  $locked.style.display = "none";
+  $revealed.classList.add("on");
+});
+
+tick();
+poll();
+</script>
+</body>
+</html>
